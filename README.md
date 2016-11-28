@@ -2,6 +2,8 @@
 
 Small wrapper around <a href="https://github.com/conorhastings/react-syntax-highlighter">React Syntax Highlighter</a>
 
+You can see a <a href="http://conor.rodeo/react-code-window/">demo here</a>.
+
 <img src="http://i.imgur.com/lq4EyCS.gif" />
 
 ### Use
