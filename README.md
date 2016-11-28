@@ -8,6 +8,8 @@ You can see a <a href="http://conor.rodeo/react-code-window/">demo here</a>.
 
 ### Use
 
+`npm install react-code-window --save`
+
 #### props
 * `width` - the width of a component, can be a number, or a string with %, px, vw, etc.. value
 * `title` - the tile of the code window
