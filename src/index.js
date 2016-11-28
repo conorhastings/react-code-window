@@ -35,17 +35,48 @@ const redButton = buttonStyle('rgb(252, 100, 95)');
 const yellowButton = buttonStyle('rgb(253, 191, 65)');
 const greenButton = buttonStyle('rgb(54, 206, 76)');
 
-export default function CodeWindow({ width = 500, title="react-code-window", children }) {
-  return (
-    <div style={{position: 'absolute', width: '100%'}}>
-      <div style={headerStyle(width)}>
-        <span style={buttonsContainer}>
-          <span style={redButton} />
-          <span style={yellowButton} />
-          <span style={greenButton} />
-        </span>
-        {title}
-      </div>
+export default class CodeWindow extends React.Component {
+  constructor() {
+    super();
+    this.state = { minimized: false, showMinus: false };
+  }
+  render() {
+    const { width = 500, title="react-code-window", children } = this.props;
+    const yellowButtonChildren = (
+      this.state.showMinus 
+      ?
+      <span style={{
+        position: 
+        'relative', 
+        bottom: '5px', 
+        fontWeight: 600,
+        fontSize: 14, 
+        color: 'rgba(0,0,0,0.5)',
+        cursor: 'default',
+        highlight: 'none'
+      }}>&minus;</span>
+      :
+      null 
+    );
+    const greenButtonChildren = (
+      this.state.showMinus 
+      ?
+      <span style={{
+        position: 
+        'relative', 
+        bottom: '5px', 
+        fontWeight: 600,
+        fontSize: 12, 
+        color: 'rgba(0,0,0,0.5)',
+        cursor: 'default',
+        highlight: 'none'
+      }}>&#43;</span>
+      :
+      null 
+    );
+    const syntax = (
+      !this.state.minimized 
+      ?
       <SyntaxHighlighter 
         style={atomOneDark} 
         customStyle={{ 
@@ -55,6 +86,35 @@ export default function CodeWindow({ width = 500, title="react-code-window", chi
       >
         {children}
       </SyntaxHighlighter>
-    </div>
-  );  
+      :
+      null
+    ); 
+    return (
+      <div style={{position: 'relative', width: '100%'}}>
+        <div style={headerStyle(width)}>
+          <span 
+            style={buttonsContainer} 
+            onMouseEnter={() => this.setState({ showMinus: true })}
+            onMouseLeave={() => this.setState({ showMinus: false })}
+          >
+            <div style={redButton} />
+            <div 
+              style={yellowButton}
+              onClick={() => this.setState({ minimized: true })}
+            >
+              {yellowButtonChildren}
+            </div>
+            <div 
+              style={greenButton} 
+              onClick={() => this.setState({ minimized: false })}
+            >
+              {greenButtonChildren}
+            </div>
+          </span>
+          {title}
+        </div>
+        {syntax}
+      </div>
+    );  
+  }
 }
