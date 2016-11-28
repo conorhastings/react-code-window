@@ -1,6 +1,6 @@
 {
   "name": "react-code-window",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "a react component for syntax highlighted code in mock editor",
   "main": "dist/index.js",
   "scripts": {
