@@ -1,0 +1,29 @@
+{
+  "name": "react-code-window",
+  "version": "0.0.0",
+  "description": "a react component for syntax highlighted code in mock editor",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src --out-dir dist",
+    "prepublishOnly": "npm run build",
+    "demo": "./node_modules/.bin/webpack --watch --progress --config=webpack.demo.config.js"
+  },
+  "author": "Conor Hastings",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.8",
+    "babel-plugin-react": "^1.0.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "webpack": "^2.1.0-beta.27"
+  },
+  "dependencies": {
+    "react-syntax-highlighter": "^3.0.0"
+  }
+}
