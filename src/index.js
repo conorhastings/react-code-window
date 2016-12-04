@@ -36,14 +36,37 @@ const yellowButton = buttonStyle('rgb(253, 191, 65)');
 const greenButton = buttonStyle('rgb(54, 206, 76)');
 
 export default class CodeWindow extends React.Component {
-  constructor() {
-    super();
-    this.state = { minimized: false, showMinus: false };
+  constructor(props) {
+    super(props);
+    this.state = { minimized: props.minimized || false, showMinus: false };
   }
+
+  onMinimize = () => {
+    if (this.props.onMinimize) {
+      this.props.onMinimize();
+    } else if (this.props.minimized === undefined) {
+      this.setState({ minimized: true });
+    }
+  }
+
+  onMaximize = () => {
+    if (this.props.onMaximize) {
+      this.props.onMaximize();
+    } else if (this.props.minimized === undefined) {
+      this.setState({ minimized: false });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.minimized !== undefined && (nextProps.minimized !== this.state.minimized)) {
+      this.setState({ minimized: nextProps.minimized });
+    }
+  }
+
   render() {
     const { width = 500, title="react-code-window", children } = this.props;
     const yellowButtonChildren = (
-      this.state.showMinus 
+      this.state.showMinus && this.props.allowMinimizeMaximize 
       ?
       <span style={{
         position: 
@@ -59,7 +82,7 @@ export default class CodeWindow extends React.Component {
       null 
     );
     const greenButtonChildren = (
-      this.state.showMinus 
+      this.state.showMinus && this.props.allowMinimizeMaximize
       ?
       <span style={{
         position: 
@@ -100,13 +123,13 @@ export default class CodeWindow extends React.Component {
             <div style={redButton} />
             <div 
               style={yellowButton}
-              onClick={() => this.setState({ minimized: true })}
+              onClick={() => this.props.allowMinimizeMaximize && this.onMinimize()}
             >
               {yellowButtonChildren}
             </div>
             <div 
               style={greenButton} 
-              onClick={() => this.setState({ minimized: false })}
+              onClick={() => this.props.allowMinimizeMaximize && this.onMaximize()}
             >
               {greenButtonChildren}
             </div>
@@ -118,3 +141,5 @@ export default class CodeWindow extends React.Component {
     );  
   }
 }
+
+CodeWindow.defaultProps = { allowMinimizeMaximize: true };
