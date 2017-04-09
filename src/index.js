@@ -1,27 +1,29 @@
 import React from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
+import copy from'copy-to-clipboard';
 import atomOneDark from 'react-syntax-highlighter/dist/styles/atom-one-dark';
 
 const headerStyle = width => ({
   boxSizing: 'border-box',
   color: 'rgb(69, 45, 45)',
-  textAlign: 'center',
   backgroundColor: 'rgb(225, 223, 225)',
   fontFamily: 'monaco, Consolas, Lucida Console, monospace',
   fontSize: 16,
   paddingBottom: 1,
   borderTopLeftRadius: 5,
   borderTopRightRadius: 5,
-  width
+  width,
+  display: 'flex',
+  justifyContent: 'space-between'
 });
 
 const buttonsContainer = {
   display: 'flex',
   justifyContent: 'space-between',
-  position: 'absolute',
-  left: 20,
-  top: 5,
-  width: 60
+  width: 60,
+  paddingTop: 5,
+  paddingLeft: 20,
+  textAlign: 'center'
 };
 
 const buttonStyle = color => ({
@@ -29,7 +31,15 @@ const buttonStyle = color => ({
   height: 14,
   borderRadius: '50%',
   backgroundColor: color
-}); 
+});
+
+const copyStyle = hovered => ({ 
+  marginRight: 12,
+  paddingLeft: 8,
+  paddingRight: 8,
+  cursor: 'pointer',
+  color: hovered ? '#2C1414' : 'rgb(69, 45, 45)'
+});
 
 const redButton = buttonStyle('rgb(252, 100, 95)');
 const yellowButton = buttonStyle('rgb(253, 191, 65)');
@@ -38,7 +48,7 @@ const greenButton = buttonStyle('rgb(54, 206, 76)');
 export default class CodeWindow extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { minimized: props.minimized || false, showMinus: false };
+    this.state = { minimized: props.minimized || false, showMinus: false, copyHovered: false };
   }
 
   onMinimize = () => {
@@ -64,7 +74,12 @@ export default class CodeWindow extends React.Component {
   }
 
   render() {
-    const { width = 500, title="react-code-window", children } = this.props;
+    const { 
+      width = 500, 
+      title ='react-code-window', 
+      children,
+      CopyComponent
+    } = this.props;
     const yellowButtonChildren = (
       this.state.showMinus && this.props.allowMinimizeMaximize 
       ?
@@ -112,6 +127,26 @@ export default class CodeWindow extends React.Component {
       :
       null
     ); 
+    const copyButton = (
+      this.props.showCopy 
+      ? 
+      <CopyComponent 
+        style={
+          typeof this.props.copyComponentStyle === 'function'
+          ?
+          this.props.copyComponentStyle(this.state.copyHovered)
+          :
+          this.props.copyComponentStyle
+        }
+        onMouseEnter={() => this.setState({ copyHovered: true })}
+        onMouseLeave={() => this.setState({ copyHovered: false })}
+        onClick={() => copy(children)}
+      >
+        {this.props.copyChildren}
+      </CopyComponent> 
+      : 
+      <span />
+    );
     return (
       <div style={{position: 'relative', width: '100%'}}>
         <div style={headerStyle(width)}>
@@ -134,7 +169,8 @@ export default class CodeWindow extends React.Component {
               {greenButtonChildren}
             </div>
           </span>
-          {title}
+          <span>{title}</span>
+          {copyButton}
         </div>
         {syntax}
       </div>
@@ -142,4 +178,10 @@ export default class CodeWindow extends React.Component {
   }
 }
 
-CodeWindow.defaultProps = { allowMinimizeMaximize: true };
+CodeWindow.defaultProps = { 
+  allowMinimizeMaximize: true, 
+  showCopy: true, 
+  CopyComponent: 'div',
+  copyComponentStyle: copyStyle,
+  copyChildren: 'Copy'
+};

@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src --out-dir dist",
+    "watch": "babel src --out-dir dist -w",
     "prepublishOnly": "npm run build",
     "demo": "./node_modules/.bin/webpack --watch --progress --config=webpack.demo.config.js"
   },
@@ -24,6 +25,8 @@
     "webpack": "^2.1.0-beta.27"
   },
   "dependencies": {
+    "copy-to-clipboard": "^3.0.5",
+    "react-copy-to-clipboard": "^4.2.3",
     "react-syntax-highlighter": "^3.0.0"
   }
 }
