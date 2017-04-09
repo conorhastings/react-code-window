@@ -78,7 +78,7 @@ export default class CodeWindow extends React.Component {
       width = 500, 
       title ='react-code-window', 
       children,
-      CopyElement
+      CopyComponent
     } = this.props;
     const yellowButtonChildren = (
       this.state.showMinus && this.props.allowMinimizeMaximize 
@@ -130,20 +130,20 @@ export default class CodeWindow extends React.Component {
     const copyButton = (
       this.props.showCopy 
       ? 
-      <CopyElement 
+      <CopyComponent 
         style={
-          typeof this.props.copyElementStyle === 'function'
+          typeof this.props.copyComponentStyle === 'function'
           ?
-          this.props.copyElementStyle(this.state.copyHovered)
+          this.props.copyComponentStyle(this.state.copyHovered)
           :
-          this.props.copyElementStyle
+          this.props.copyComponentStyle
         }
         onMouseEnter={() => this.setState({ copyHovered: true })}
         onMouseLeave={() => this.setState({ copyHovered: false })}
         onClick={() => copy(children)}
       >
-        Copy
-      </CopyElement> 
+        {this.props.copyChildren}
+      </CopyComponent> 
       : 
       <span />
     );
@@ -181,6 +181,7 @@ export default class CodeWindow extends React.Component {
 CodeWindow.defaultProps = { 
   allowMinimizeMaximize: true, 
   showCopy: true, 
-  CopyElement: 'div',
-  copyElementStyle: copyStyle
+  CopyComponent: 'div',
+  copyComponentStyle: copyStyle,
+  copyChildren: 'Copy'
 };
